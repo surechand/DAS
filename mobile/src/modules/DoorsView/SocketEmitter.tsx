@@ -5,9 +5,9 @@ import {SocketContext} from '../../context/SocketContext';
 
 const useSocketEmitter = (): {
   refreshDoorsList: () => void;
-  lockLongOpen: (doorId: string) => void;
-  lockQuickOpen: (doorId: string) => void;
-  lockClose: (doorId: string) => void;
+  lockLongOpen: (lockID: string) => void;
+  lockQuickOpen: (lockID: string) => void;
+  lockClose: (lockID: string) => void;
 } => {
   const {params} = useRoute<DoorsScreenRouteProp>();
   const {email} = params;
@@ -17,16 +17,16 @@ const useSocketEmitter = (): {
     socket.emit('doorsList', {email});
   };
 
-  const lockLongOpen = (doorId: string) => {
-    socket.emit('openDoor', {doorId});
+  const lockLongOpen = (lockID: string) => {
+    socket.emit('openDoor', {lockID: lockID});
   };
 
-  const lockQuickOpen = (doorId: string) => {
-    socket.emit('quickOpenDoor', {doorId});
+  const lockQuickOpen = (lockID: string) => {
+    socket.emit('quickOpenDoor', {lockID: lockID});
   };
 
-  const lockClose = (doorId: string) => {
-    socket.emit('closeDoor', {doorId});
+  const lockClose = (lockID: string) => {
+    socket.emit('closeDoor', {lockID: lockID});
   };
 
   return {

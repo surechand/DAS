@@ -1,4 +1,4 @@
-import {StackScreenProps} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/core';
 
 export type MainStackParams = {
   Login: undefined;
@@ -7,4 +7,4 @@ export type MainStackParams = {
   };
 };
 
-export type DoorsScreenRouteProp = StackScreenProps<MainStackParams, 'Login'>;
+export type DoorsScreenRouteProp = RouteProp<MainStackParams, 'Doors'>;

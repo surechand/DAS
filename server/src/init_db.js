@@ -1,5 +1,5 @@
 var mysql = require("mysql");
-var config = require('./config.json');
+var config = require("./config.json");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -9,23 +9,34 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query("DROP DATABASE IF EXISTS `door_access`;", function (err) {
-  if (err) throw err;
-  console.log("Cleared previous schema.");
-});
-
 connection.query(
-  "CREATE SCHEMA IF NOT EXISTS `door_access` DEFAULT CHARACTER SET utf8 COLLATE utf8_polish_ci;",
+  "DROP DATABASE IF EXISTS `door_access_system`;",
   function (err) {
     if (err) throw err;
-    console.log("Scheme door_access successfully created.");
+    console.log("Cleared previous schema.");
   }
 );
 
-connection.query("USE door_access;", function (err) {
+connection.query(
+  "CREATE SCHEMA IF NOT EXISTS `door_access_system` DEFAULT CHARACTER SET utf8 COLLATE utf8_polish_ci;",
+  function (err) {
+    if (err) throw err;
+    console.log("Scheme door_access_system successfully created.");
+  }
+);
+
+connection.query("USE door_access_system;", function (err) {
   if (err) throw err;
-  console.log("Scheme door_access successfully created.");
+  console.log("Scheme door_access_system successfully created.");
 });
+
+// connection.query(
+//   `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'`,
+//   function (err) {
+//     if (err) throw err;
+//     console.log("alter user root@localhost");
+//   }
+// );
 
 //-----------------------------------------------------------------------------------------------------
 
@@ -56,7 +67,7 @@ connection.query(
 //-----------------------------------------------------------------------------------------------------
 
 connection.query(
-  "CREATE TABLE IF NOT EXISTS  `door_access`.`doors` (`lockID` VARCHAR(45) NOT NULL, `door_name` VARCHAR(30) NOT NULL, `uuid` VARCHAR(45) UNIQUE NOT NULL, `isOpen` BOOLEAN NOT NULL DEFAULT FALSE,PRIMARY KEY (`lockID`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_polish_ci;",
+  "CREATE TABLE IF NOT EXISTS  `door_access_system`.`doors` (`lockID` VARCHAR(45) NOT NULL, `door_name` VARCHAR(30) NOT NULL, `isOpen` BOOLEAN NOT NULL DEFAULT FALSE,PRIMARY KEY (`lockID`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_polish_ci;",
   function (err) {
     if (err) throw err;
     console.log("Doors data table has been created.");
@@ -64,7 +75,7 @@ connection.query(
 );
 
 connection.query(
-  'insert ignore into doors (lockID, door_name, uuid) values ("192.1.200.15", "serwerownia", "7eac3b3f-2010-4aef-ba74-548dbee10de3");',
+  'insert ignore into doors (lockID, door_name) values ("192.1.200.15", "serwerownia");',
   function (err) {
     if (err) throw err;
     console.log("door data #1 added");
@@ -72,33 +83,33 @@ connection.query(
 );
 
 connection.query(
-  'insert ignore into doors (lockID, door_name, uuid) values ("192.1.200.16", "biuro", "beb5483e-36e1-4688-b7f5-ea07361b26a8");',
+  'insert ignore into doors (lockID, door_name) values ("192.1.200.16", "biuro");',
   function (err) {
     if (err) throw err;
-    console.log("door data #1 added");
+    console.log("door data #2 added");
   }
 );
 
 connection.query(
-  'insert ignore into doors (lockID, door_name, uuid) values ("192.1.200.17", "pracownia", "c6adffa1-e052-4daf-8ec2-4db864894336");',
+  'insert ignore into doors (lockID, door_name) values ("192.1.200.17", "pracownia");',
   function (err) {
     if (err) throw err;
-    console.log("door data #1 added");
+    console.log("door data #3 added");
   }
 );
 
 connection.query(
-  'insert ignore into doors (lockID, door_name, uuid) values ("200.200.150.1", "pracownia 2", "312f93bf-1672-470d-89e9-3ca2f658e80a");',
+  'insert ignore into doors (lockID, door_name) values ("200.200.150.1", "pracownia 2");',
   function (err) {
     if (err) throw err;
-    console.log("door data #2 added.");
+    console.log("door data #4 added.");
   }
 );
 
 //-----------------------------------------------------------------------------------------------------
 
 connection.query(
-  "CREATE TABLE IF NOT EXISTS  `door_access`.`permissions` (`lockID` VARCHAR(45) NOT NULL,`email` VARCHAR(45) NOT NULL, PRIMARY KEY(`lockID`, `email`), CONSTRAINT `FK_lockID` FOREIGN KEY (`lockID`) REFERENCES `door_access`.`doors` (`lockID`) ON DELETE CASCADE ON UPDATE CASCADE, CONSTRAINT `FK_email` FOREIGN KEY (`email`) REFERENCES `door_access`.`users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_polish_ci;",
+  "CREATE TABLE IF NOT EXISTS `door_access_system`.`permissions` (`lockID` VARCHAR(45) NOT NULL,`email` VARCHAR(45) NOT NULL, PRIMARY KEY(`lockID`, `email`), CONSTRAINT `FK_lockID` FOREIGN KEY (`lockID`) REFERENCES `door_access_system`.`doors` (`lockID`) ON DELETE CASCADE ON UPDATE CASCADE, CONSTRAINT `FK_email` FOREIGN KEY (`email`) REFERENCES `door_access_system`.`users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_polish_ci;",
   function (err) {
     if (err) throw err;
     console.log("Doors data table has been created.");
@@ -125,7 +136,7 @@ connection.query(
   'insert ignore into permissions (lockID, email) values ("192.1.200.16", "test@gmail.com");',
   function (err) {
     if (err) throw err;
-    console.log("permission data #2 added.");
+    console.log("permission data #3 added.");
   }
 );
 
@@ -133,14 +144,14 @@ connection.query(
   'insert ignore into permissions (lockID, email) values ("192.1.200.17", "test@gmail.com");',
   function (err) {
     if (err) throw err;
-    console.log("permission data #2 added.");
+    console.log("permission data #4 added.");
   }
 );
 
 //-----------------------------------------------------------------------------------------------------
 
 connection.query(
-  "CREATE TABLE IF NOT EXISTS `door_access`.`admins` (`login` VARCHAR(30) NOT NULL, `password` VARCHAR(45) NOT NULL, PRIMARY KEY (`login`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_polish_ci; ",
+  "CREATE TABLE IF NOT EXISTS `door_access_system`.`admins` (`login` VARCHAR(30) NOT NULL, `password` VARCHAR(45) NOT NULL, PRIMARY KEY (`login`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_polish_ci; ",
   function (err) {
     if (err) throw err;
     console.log("Admins data table has been created.");
@@ -159,7 +170,7 @@ connection.query(
   'insert ignore into admins(login, password) values("root", "root");',
   function (err) {
     if (err) throw err;
-    console.log("admin data #1 added.");
+    console.log("admin data #2 added.");
   }
 );
 

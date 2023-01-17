@@ -13,8 +13,8 @@ import {
   Platform,
 } from 'react-native';
 import {io} from 'socket.io-client';
-// import {StackNavigationProp} from '@react-navigation/stack';
-// import {useNavigation} from '@react-navigation/core';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/core';
 import {Styles} from './Stylesheets/Stylesheets';
 import {
   HeaderText,
@@ -38,12 +38,12 @@ import {
   connectionStates,
   ActionState,
 } from './ServersReducer';
-import {DoorsScreenRouteProp} from '../../navigation/Params';
+import {MainStackParams} from '../../navigation/Params';
 import {SocketContext} from '../../context/SocketContext';
 
-// type loginScreenProp = StackNavigationProp<MainStackParams, 'Login'>;
+type loginScreenProp = StackNavigationProp<MainStackParams, 'Login'>;
 
-const LoginView = ({navigation}: DoorsScreenRouteProp): JSX.Element => {
+const LoginView = (): JSX.Element => {
   const {Background} = Styles;
   const {SetConnected, DisconnectAll, AddServers, DeleteServer, LoadServers} =
     ActionState;
@@ -63,7 +63,7 @@ const LoginView = ({navigation}: DoorsScreenRouteProp): JSX.Element => {
 
   const {socket, setSocket} = useContext(SocketContext);
 
-  // const navigation = useNavigation<loginScreenProp>();
+  const navigation = useNavigation<loginScreenProp>();
 
   useEffect(() => {
     const fetchServersAsync = async () => {
@@ -167,7 +167,7 @@ const LoginView = ({navigation}: DoorsScreenRouteProp): JSX.Element => {
       keyboardVerticalOffset={-100}>
       {/* <ScrollView contentContainerStyle={{ flexGrow: 1 }}> */}
       <LoginViewContainer>
-        <HeaderText>door_system</HeaderText>
+        <HeaderText>DAS</HeaderText>
 
         <ServerScrollView
           refreshControl={

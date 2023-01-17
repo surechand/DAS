@@ -1,8 +1,7 @@
 const express = require("express");
 const socket = require("socket.io");
 const cors = require("cors");
-var config = require('./config.json');
-
+var config = require("./config.json");
 
 const app = express();
 app.use(cors());
@@ -20,7 +19,7 @@ const lockFunction = {
   NOTHING: "nothing",
 };
 var currentFunction = lockFunction.NOTHING;
-var currentUUID = "";
+// var currentUUID = "";
 
 class User {
   constructor(email, pass) {
@@ -28,19 +27,11 @@ class User {
     this.password = pass;
   }
 }
-
 class Door {
-  constructor(lockID, doorName) {
+  constructor(lockID, doorName, isOpen) {
     this.lockID = lockID;
     this.doorName = doorName;
-  }
-}
-
-class DoorServer {
-  constructor(lockID, doorName, uuid, isOpen) {
-    this.lockID = lockID;
-    this.doorName = doorName;
-    this.uuid = uuid;
+    // this.uuid = uuid;
     this.isOpen = isOpen;
   }
 }
@@ -56,7 +47,7 @@ var connection = mysql.createConnection({
   host: "localhost",
   user: config.username,
   password: config.password,
-  database: "door_access",
+  database: "door_access_system",
 });
 
 app.get("/", (req, res) => {
@@ -94,7 +85,7 @@ io.on("connection", (socket) => {
 
   socket.on("loginRequest", (data) => {
     var loginQuery =
-      'SELECT * from door_access.users WHERE email = "' +
+      'SELECT * from door_access_system.users WHERE email = "' +
       data.email +
       '" AND password = "' +
       data.password +
@@ -134,13 +125,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("requestUsers", function () {
-    users=[];
+    users = [];
     connection.query("SELECT * from users", function (error, results, fields) {
       if (error) throw error;
       for (const row of results) {
         users.push(new User(row.email, row.password));
       }
-      console.log(users)
+      console.log(users);
       console.log("users requested");
       socket.emit("users", users);
     });
@@ -217,9 +208,7 @@ io.on("connection", (socket) => {
         var doorsList = [];
         for (const row of result) {
           console.log(row.isOpen);
-          doorsList.push(
-            new DoorServer(row.lockID, row.door_name, row.uuid, row.isOpen)
-          );
+          doorsList.push(new Door(row.lockID, row.door_name, row.isOpen));
         }
         socket.emit("doorListRes", doorsList);
       }
@@ -228,12 +217,10 @@ io.on("connection", (socket) => {
 
   socket.on("addDoors", (data) => {
     var addDoorQuery =
-      'insert ignore into doors (lockID, door_name, uuid) values ("' +
+      'insert ignore into doors (lockID, door_name) values ("' +
       data.lockID +
       '", "' +
       data.doorName +
-      '", "' +
-      data.uuid +
       '");';
 
     connection.query(addDoorQuery, function (err, result, fields) {
@@ -355,9 +342,7 @@ io.on("connection", (socket) => {
         console.log("Couldn't get list of doors for user: " + data.email);
       } else {
         for (const row of results) {
-          doorsList.push(
-            new DoorServer(row.lockID, row.door_name, row.uuid, row.isOpen)
-          );
+          doorsList.push(new Door(row.lockID, row.door_name, row.isOpen));
         }
         socket.emit("doors", { doorsList: doorsList });
         console.log(doorsList);
@@ -520,9 +505,7 @@ io.on("connection", (socket) => {
       } else {
         var newDoorsList = [];
         for (const row of results) {
-          newDoorsList.push(
-            new DoorServer(row.lockID, row.door_name, row.uuid, row.isOpen)
-          );
+          newDoorsList.push(new Door(row.lockID, row.door_name, row.isOpen));
         }
         socket.emit("fullDoorsListResponse", { doorsList: newDoorsList });
         console.log("popup");
@@ -561,46 +544,61 @@ io.on("connection", (socket) => {
     }
   });
 
+  // socket.on("openDoor", (data) => {
+  //   console.log(data);
+  //   console.log("opening doors with id: " + data.lockID);
+  //   socket.broadcast.emit("openLockResponse", {
+  //     didOpen: true,
+  //     lockID: data.lockID,
+  //   });
+  // });
+
+  // socket.on("closeDoor", (data) => {
+  //   console.log(data);
+  //   console.log("closing doors with id: " + data.lockID);
+  //   socket.broadcast.emit("closeLockResponse", {
+  //     didClose: true,
+  //     lockID: data.lockID,
+  //   });
+  // });
+
+  // socket.on("quickOpenDoor", (data) => {
+  //   console.log(data);
+  //   console.log("opening doors for 10 seconds with id: " + data.lockID);
+  //   socket.broadcast.emit("quickOpenLockResponse", {
+  //     didOpen: true,
+  //     lockID: data.lockID,
+  //   });
+  // });
+
   socket.on("openDoor", (data) => {
-    console.log("opening doors with id: " + data.doorId);
-    socket.broadcast.emit("openLock", { uuid: data.doorId });
+    console.log(data);
+    console.log("response");
+    // if (data.didOpen) {
+    // console.log("didOpen true");
+    var openDoorQuery =
+      'UPDATE doors SET isOpen = 1 WHERE lockID="' + data.lockID + '";';
+    connection.query(openDoorQuery, function (err) {
+      if (err) throw err;
+    });
+    // }
   });
 
   socket.on("closeDoor", (data) => {
-    console.log("closing doors with id: " + data.doorId);
-    socket.broadcast.emit("closeLock", { uuid: data.doorId });
+    console.log(data);
+    // if (data.didClose) {
+    var closeDoorQuery =
+      'UPDATE doors SET isOpen = 0 WHERE lockID="' + data.lockID + '";';
+    connection.query(closeDoorQuery, function (err) {
+      if (err) throw err;
+    });
+    // }
   });
 
   socket.on("quickOpenDoor", (data) => {
-    console.log("opening doors for 10 seconds with id: " + data.doorId);
-    socket.broadcast.emit("quickOpenLock", { uuid: data.doorId });
-  });
-
-  socket.on("openLockResponse", (data) => {
-    console.log("response");
-    if (data.didOpen) {
-      console.log("didOpen true");
-      var openDoorQuery =
-        'UPDATE doors SET isOpen = 1 WHERE uuid="' + data.uuid + '";';
-      connection.query(openDoorQuery, function (err) {
-        if (err) throw err;
-      });
-    }
-  });
-
-  socket.on("closeLockResponse", (data) => {
-    if (data.didClose) {
-      var closeDoorQuery =
-        'UPDATE doors SET isOpen = 0 WHERE uuid="' + data.uuid + '";';
-      connection.query(closeDoorQuery, function (err) {
-        if (err) throw err;
-      });
-    }
-  });
-
-  socket.on("quickOpenLockResponse", (data) => {
-    if (data.didOpen) {
-      console.log("opened for 10 seconds");
-    }
+    console.log(data);
+    // if (data.didOpen) {
+    console.log("opened for 10 seconds");
+    // }
   });
 });

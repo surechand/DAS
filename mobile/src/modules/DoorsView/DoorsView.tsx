@@ -7,25 +7,22 @@ import {
   Text,
   ScrollView,
   Pressable,
-  Platform,
 } from 'react-native';
-// import Icon from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Feather';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/core';
-import BleManager from 'react-native-ble-manager';
 import {styles} from './Stylesheets/Stylesheets';
 import ExpandableItem from './ExpandableItem';
 import {MainStackParams} from '../../navigation/Params';
-import useBTManager from './BTManager';
+// import useBTManager from './BTManager';
 import useSocketManager from './SocketManager';
 import useSocketEmitter from './SocketEmitter';
 
 type doorsScreenProp = StackNavigationProp<MainStackParams, 'Doors'>;
 
 const DoorsView: React.FC = () => {
-  const {UUIDsList, startScan, disableBTModule, getDoorsInRange} =
-    useBTManager();
+  // const {UUIDsList, startScan, disableBTModule, getDoorsInRange} =
+  //   useBTManager();
   const {doorsList, setDoorsList, disconnectSocket} = useSocketManager();
   const {refreshDoorsList, lockLongOpen, lockQuickOpen, lockClose} =
     useSocketEmitter();
@@ -33,12 +30,12 @@ const DoorsView: React.FC = () => {
 
   const refreshDoors = () => {
     refreshDoorsList();
-    startScan();
+    // startScan();
   };
 
   const logOut = () => {
     disconnectSocket();
-    disableBTModule();
+    // disableBTModule();
     navigation.navigate('Login');
   };
 
@@ -56,22 +53,22 @@ const DoorsView: React.FC = () => {
 
   useEffect(() => {
     refreshDoorsList();
-    if (Platform.OS === 'android') {
-      BleManager.enableBluetooth()
-        .then()
-        .catch(() => {
-          logOut();
-        });
-    }
+    // if (Platform.OS === 'android') {
+    //   BleManager.enableBluetooth()
+    //     .then()
+    //     .catch(() => {
+    //       logOut();
+    //     });
+    // }
     return () => {
-      disableBTModule();
+      // disableBTModule();
     };
   }, []);
 
   useEffect(() => {
-    const newDoorsList = getDoorsInRange(doorsList);
-    setDoorsList(newDoorsList);
-  }, [UUIDsList]);
+    // const newDoorsList = getDoorsInRange(doorsList);
+    // setDoorsList(newDoorsList);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -98,13 +95,13 @@ const DoorsView: React.FC = () => {
               updateLayout(key);
             }}
             longOpenFunction={() => {
-              lockLongOpen(door.uuid);
+              lockLongOpen(door.lockID);
             }}
             quickOpenFunction={() => {
-              lockQuickOpen(door.uuid);
+              lockQuickOpen(door.lockID);
             }}
             closeFunction={() => {
-              lockClose(door.uuid);
+              lockClose(door.lockID);
             }}
             doorsListRefresh={() => {
               refreshDoors();

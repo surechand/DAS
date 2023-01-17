@@ -20,15 +20,22 @@ const useSocketManager = (): {
 
   useEffect(() => {
     socket.on('doors', (data: DataType) => {
-      const array = data.doorsList.map(item => ({
-        lockID: item.lockID,
-        doorName: item.doorName,
-        uuid: item.uuid,
-        isOpen: item.isOpen,
-        inBtRange: false,
-        isExpanded: false,
-      }));
-      setDoorsList(array);
+      // const array = data.doorsList.map(item => ({
+      //   lockID: item.lockID,
+      //   doorName: item.doorName,
+      //   isOpen: item.isOpen,
+      //   inBtRange: false,
+      //   isExpanded: false,
+      // }));
+      setDoorsList(
+        data.doorsList.map(item => ({
+          lockID: item.lockID,
+          doorName: item.doorName,
+          isOpen: item.isOpen,
+          inBtRange: false,
+          isExpanded: false,
+        })),
+      );
     });
   }, []);
 

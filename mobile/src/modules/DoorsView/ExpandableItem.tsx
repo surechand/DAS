@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { styles } from './Stylesheets/Stylesheets';
-import { Door } from './DoorType';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {styles} from './Stylesheets/Stylesheets';
+import {Door} from './DoorType';
 
 interface ItemProps {
   item: Door;
@@ -39,14 +39,13 @@ const ExpandableItem = ({
     <View>
       {/* Header of the Expandable List Item */}
       <TouchableOpacity
-        key={item.inBtRange.valueOf.toString()}
+        key={item.lockID.valueOf.toString()}
         activeOpacity={0.8}
         onPress={onPressFunction}
         style={[
           styles.accordionHeaderItem,
-          item.inBtRange ? styles.inRangeColor : styles.outOfRangeColor,
-        ]}
-      >
+          item.isOpen ? styles.inRangeColor : styles.outOfRangeColor,
+        ]}>
         <Text style={styles.accordionHeaderText}>{item.doorName}</Text>
       </TouchableOpacity>
       {item.isOpen ? (
@@ -54,17 +53,15 @@ const ExpandableItem = ({
           style={{
             height: layoutHeight,
             overflow: 'hidden',
-          }}
-        >
+          }}>
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.accordionListElement}
             onPress={() =>
-              item.inBtRange
+              item.isOpen
                 ? [closeFunction(), afterClickRefresh()]
-                : alert(item.doorName.concat(' is not in BT range'))
-            }
-          >
+                : alert(item.doorName.concat(' is not open'))
+            }>
             <Text style={styles.accordionListElementText}>Close door</Text>
           </TouchableOpacity>
         </View>
@@ -73,28 +70,25 @@ const ExpandableItem = ({
           style={{
             height: layoutHeight,
             overflow: 'hidden',
-          }}
-        >
+          }}>
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.accordionListElement}
             onPress={() =>
-              item.inBtRange
-                ? [longOpenFunction(), afterClickRefresh()]
-                : alert(item.doorName.concat(' is not in BT range'))
-            }
-          >
+              item.isOpen
+                ? alert(item.doorName.concat(' is already opened'))
+                : [longOpenFunction(), afterClickRefresh()]
+            }>
             <Text style={styles.accordionListElementText}>Open door</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.accordionListElement}
             onPress={() =>
-              item.inBtRange
-                ? [quickOpenFunction(), afterClickRefresh()]
-                : alert(item.doorName.concat(' is not in BT range'))
-            }
-          >
+              item.isOpen
+                ? alert(item.doorName.concat(' is already opened'))
+                : [quickOpenFunction(), afterClickRefresh()]
+            }>
             <Text style={styles.accordionListElementText}>Open for 10s</Text>
           </TouchableOpacity>
         </View>
