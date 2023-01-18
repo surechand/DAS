@@ -102,7 +102,7 @@ const LoginView = (): JSX.Element => {
     if (ip !== '') {
       const newServer: server[] = [
         {
-          name: 'nowy '.concat(servers.length.toString()),
+          name: 'server '.concat(servers.length.toString()),
           ip,
           key: servers.length,
           status: connectionStates.none,

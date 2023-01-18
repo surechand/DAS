@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {
   EntryContainer,
   TextContainer,
@@ -8,8 +8,8 @@ import {
   RangeIcon,
   CheckIcon,
 } from './ServerEntry.Components';
-import { Colors } from '../Stylesheets/Stylesheets';
-import { connectionStates } from '../ServersReducer';
+import {Colors} from '../Stylesheets/Stylesheets';
+import {connectionStates} from '../ServersReducer';
 
 interface EntryProps {
   ip: string;
@@ -60,8 +60,7 @@ const ServerEntry: React.FC<EntryProps> = ({
           flex: 1,
           alignContent: 'center',
           justifyContent: 'center',
-        }}
-      >
+        }}>
         {switchIcon()}
       </View>
     </EntryContainer>

@@ -32,7 +32,6 @@ const useSocketManager = (): {
           lockID: item.lockID,
           doorName: item.doorName,
           isOpen: item.isOpen,
-          inBtRange: false,
           isExpanded: false,
         })),
       );
