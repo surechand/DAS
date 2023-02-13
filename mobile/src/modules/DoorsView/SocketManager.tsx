@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {Door} from './DoorType';
 import {SocketContext} from '../../context/SocketContext';
+import useSocketEmitter from './SocketEmitter';
 
 interface DataType {
   doorsList: Door[];
@@ -11,6 +12,7 @@ const useSocketManager = (): {
   setDoorsList: React.Dispatch<React.SetStateAction<Door[]>>;
   disconnectSocket: () => void;
 } => {
+  const {refreshDoorsList} = useSocketEmitter();
   const [doorsList, setDoorsList] = useState<Door[]>([]);
   const {socket} = useContext(SocketContext);
 
@@ -20,13 +22,6 @@ const useSocketManager = (): {
 
   useEffect(() => {
     socket.on('doors', (data: DataType) => {
-      // const array = data.doorsList.map(item => ({
-      //   lockID: item.lockID,
-      //   doorName: item.doorName,
-      //   isOpen: item.isOpen,
-      //   inBtRange: false,
-      //   isExpanded: false,
-      // }));
       setDoorsList(
         data.doorsList.map(item => ({
           lockID: item.lockID,
@@ -36,7 +31,13 @@ const useSocketManager = (): {
         })),
       );
     });
-  }, []);
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on('doorStateChanged', () => {
+      refreshDoorsList();
+    });
+  }, [socket]);
 
   return {
     doorsList,

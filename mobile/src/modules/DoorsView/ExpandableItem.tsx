@@ -9,7 +9,7 @@ interface ItemProps {
   longOpenFunction: () => void;
   quickOpenFunction: () => void;
   closeFunction: () => void;
-  doorsListRefresh: () => void;
+  // doorsListRefresh: () => void;
 }
 
 const ExpandableItem = ({
@@ -18,7 +18,6 @@ const ExpandableItem = ({
   longOpenFunction,
   quickOpenFunction,
   closeFunction,
-  doorsListRefresh,
 }: ItemProps): JSX.Element => {
   // Custom Component for the Expandable List
   const [layoutHeight, setLayoutHeight] = useState<number | undefined>(0);
@@ -30,11 +29,6 @@ const ExpandableItem = ({
       setLayoutHeight(0);
     }
   }, [item.isExpanded]);
-
-  const afterClickRefresh = () => {
-    setTimeout(() => doorsListRefresh(), 1337);
-  };
-
   return (
     <View>
       {/* Header of the Expandable List Item */}
@@ -59,7 +53,7 @@ const ExpandableItem = ({
             style={styles.accordionListElement}
             onPress={() =>
               item.isOpen
-                ? [closeFunction(), afterClickRefresh()]
+                ? [closeFunction()]
                 : alert(item.doorName.concat(' is not open'))
             }>
             <Text style={styles.accordionListElementText}>Close door</Text>
@@ -77,7 +71,7 @@ const ExpandableItem = ({
             onPress={() =>
               item.isOpen
                 ? alert(item.doorName.concat(' is already opened'))
-                : [longOpenFunction(), afterClickRefresh()]
+                : longOpenFunction()
             }>
             <Text style={styles.accordionListElementText}>Open door</Text>
           </TouchableOpacity>
@@ -87,7 +81,7 @@ const ExpandableItem = ({
             onPress={() =>
               item.isOpen
                 ? alert(item.doorName.concat(' is already opened'))
-                : [quickOpenFunction(), afterClickRefresh()]
+                : quickOpenFunction()
             }>
             <Text style={styles.accordionListElementText}>Open for 10s</Text>
           </TouchableOpacity>

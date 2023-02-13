@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   LayoutAnimation,
@@ -14,60 +14,50 @@ import {useNavigation} from '@react-navigation/core';
 import {styles} from './Stylesheets/Stylesheets';
 import ExpandableItem from './ExpandableItem';
 import {MainStackParams} from '../../navigation/Params';
-// import useBTManager from './BTManager';
 import useSocketManager from './SocketManager';
 import useSocketEmitter from './SocketEmitter';
+// import {useContext} from 'react';
+// import {SocketContext} from '../../context/SocketContext';
 
 type doorsScreenProp = StackNavigationProp<MainStackParams, 'Doors'>;
 
 const DoorsView: React.FC = () => {
-  // const {UUIDsList, startScan, disableBTModule, getDoorsInRange} =
-  //   useBTManager();
   const {doorsList, setDoorsList, disconnectSocket} = useSocketManager();
   const {refreshDoorsList, lockLongOpen, lockQuickOpen, lockClose} =
     useSocketEmitter();
   const navigation = useNavigation<doorsScreenProp>();
+  const [lastExpanded, setLastExpanded] = useState<string | undefined>();
+  // const {socket} = useContext(SocketContext);
 
-  const refreshDoors = () => {
-    refreshDoorsList();
-    // startScan();
-  };
+  // const refreshDoors = () => {
+  //   refreshDoorsList();
+  // };
 
   const logOut = () => {
     disconnectSocket();
-    // disableBTModule();
     navigation.navigate('Login');
   };
 
   const updateLayout = (index: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const array = [...doorsList];
-    array.forEach((value, placeindex) => {
-      value.isExpanded =
+    array.forEach((el, placeindex) => {
+      el.isExpanded =
         placeindex === index
-          ? (array[placeindex].isExpanded = !array[placeindex].isExpanded)
-          : (array[placeindex].isExpanded = false);
+          ? (el.isExpanded = !el.isExpanded)
+          : (el.isExpanded = false);
+      setLastExpanded(el.lockID);
     });
     setDoorsList(array);
   };
 
   useEffect(() => {
     refreshDoorsList();
-    // if (Platform.OS === 'android') {
-    //   BleManager.enableBluetooth()
-    //     .then()
-    //     .catch(() => {
-    //       logOut();
-    //     });
-    // }
-    return () => {
-      // disableBTModule();
-    };
-  }, []);
-
-  useEffect(() => {
-    // const newDoorsList = getDoorsInRange(doorsList);
-    // setDoorsList(newDoorsList);
+    setLastExpanded(undefined);
+    const lastTemp = doorsList.find(el => el.lockID === lastExpanded);
+    if (lastTemp) {
+      lastTemp.isExpanded = true;
+    }
   }, []);
 
   return (
@@ -82,7 +72,7 @@ const DoorsView: React.FC = () => {
         <Text style={styles.headerText}>Available doors</Text>
         <Pressable
           onPress={() => {
-            refreshDoors();
+            refreshDoorsList();
           }}>
           <Icon name="refresh-ccw" style={styles.headerButton} />
         </Pressable>
@@ -103,9 +93,9 @@ const DoorsView: React.FC = () => {
             closeFunction={() => {
               lockClose(door.lockID);
             }}
-            doorsListRefresh={() => {
-              refreshDoors();
-            }}
+            // doorsListRefresh={() => {
+            //   refreshDoorsList();
+            // }}
             item={door}
           />
         ))}

@@ -19,7 +19,6 @@ const lockFunction = {
   NOTHING: "nothing",
 };
 var currentFunction = lockFunction.NOTHING;
-// var currentUUID = "";
 
 class User {
   constructor(email, pass) {
@@ -31,7 +30,6 @@ class Door {
   constructor(lockID, doorName, isOpen) {
     this.lockID = lockID;
     this.doorName = doorName;
-    // this.uuid = uuid;
     this.isOpen = isOpen;
   }
 }
@@ -581,6 +579,7 @@ io.on("connection", (socket) => {
     connection.query(openDoorQuery, function (err) {
       if (err) throw err;
     });
+    io.emit("doorStateChanged");
     // }
   });
 
@@ -592,6 +591,8 @@ io.on("connection", (socket) => {
     connection.query(closeDoorQuery, function (err) {
       if (err) throw err;
     });
+    console.log("doors closed");
+    io.emit("doorStateChanged");
     // }
   });
 
@@ -599,6 +600,25 @@ io.on("connection", (socket) => {
     console.log(data);
     // if (data.didOpen) {
     console.log("opened for 10 seconds");
+    var openDoorQuery =
+      'UPDATE doors SET isOpen = 1 WHERE lockID="' + data.lockID + '";';
+    connection.query(openDoorQuery, function (err) {
+      if (err) throw err;
+    });
+
+    io.emit("doorStateChanged");
+
+    var closeDoorQuery =
+      'UPDATE doors SET isOpen = 0 WHERE lockID="' + data.lockID + '";';
+
+    setTimeout(() => {
+      connection.query(closeDoorQuery, function (err) {
+        if (err) throw err;
+      });
+      console.log("doors closed");
+      io.emit("doorStateChanged");
+    }, 10000);
+
     // }
   });
 });
