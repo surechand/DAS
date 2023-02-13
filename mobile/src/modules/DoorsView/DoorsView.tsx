@@ -16,8 +16,6 @@ import ExpandableItem from './ExpandableItem';
 import {MainStackParams} from '../../navigation/Params';
 import useSocketManager from './SocketManager';
 import useSocketEmitter from './SocketEmitter';
-// import {useContext} from 'react';
-// import {SocketContext} from '../../context/SocketContext';
 
 type doorsScreenProp = StackNavigationProp<MainStackParams, 'Doors'>;
 
@@ -27,11 +25,6 @@ const DoorsView: React.FC = () => {
     useSocketEmitter();
   const navigation = useNavigation<doorsScreenProp>();
   const [lastExpanded, setLastExpanded] = useState<string | undefined>();
-  // const {socket} = useContext(SocketContext);
-
-  // const refreshDoors = () => {
-  //   refreshDoorsList();
-  // };
 
   const logOut = () => {
     disconnectSocket();
@@ -93,9 +86,6 @@ const DoorsView: React.FC = () => {
             closeFunction={() => {
               lockClose(door.lockID);
             }}
-            // doorsListRefresh={() => {
-            //   refreshDoorsList();
-            // }}
             item={door}
           />
         ))}
