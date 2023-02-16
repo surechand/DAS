@@ -11,7 +11,11 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Platform,
+  View,
+  ScrollView,
+  Text,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {io} from 'socket.io-client';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/core';
@@ -160,24 +164,27 @@ const LoginView = (): JSX.Element => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="position"
-      style={Background}
-      contentContainerStyle={{flex: 1}}
-      keyboardVerticalOffset={-100}>
-      {/* <ScrollView contentContainerStyle={{ flexGrow: 1 }}> */}
-      <LoginViewContainer>
-        <HeaderText>DAS</HeaderText>
+    <ScrollView
+      contentContainerStyle={{flexGrow: 1}}
+      nestedScrollEnabled={true}>
+      <KeyboardAvoidingView
+        // KeyboardAwareScrollView
 
-        <ServerScrollView
-          refreshControl={
-            // eslint-disable-next-line react/jsx-wrap-multilines
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={async () => handleRefresh()}
-            />
-          }
-          contentContainerStyle={{alignItems: 'center'}}>
+        behavior="position"
+        style={Background}
+        // style={{
+        //   flex: 1,
+        //   display: 'flex',
+        //   flexDirection: 'column',
+        //   // justifyContent: 'center',
+        //   alignContent: 'center',
+        //   backgroundColor: '#373838',
+        // }}
+        contentContainerStyle={{flex: 1}}
+        keyboardVerticalOffset={-1000}>
+        <LoginViewContainer>
+          <HeaderText>DAS</HeaderText>
+
           <SecondaryText
             style={{
               marginTop: 8,
@@ -185,70 +192,82 @@ const LoginView = (): JSX.Element => {
             }}>
             Select a server to log into:
           </SecondaryText>
-          {servers.map(element => {
-            return (
-              <ServerEntry
-                key={element.key}
-                description={element.name}
-                ip={element.ip}
-                isSelected={element === selectedServer}
-                onPress={() => {
-                  setSelectedServer(element);
-                  handleConnection(element);
-                }}
-                onLongPress={() =>
-                  srvDispatch({
-                    type: DeleteServer,
-                    server: element,
-                  })
-                }
-                connectionStatus={element.status}
+
+          <ServerScrollView
+            refreshControl={
+              // eslint-disable-next-line react/jsx-wrap-multilines
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={async () => handleRefresh()}
               />
-            );
-          })}
-          <ManualIP connectionHandler={manualIPSelection} />
-        </ServerScrollView>
+            }
+            contentContainerStyle={{flex: 1, alignItems: 'center'}}>
+            {servers.map(element => {
+              return (
+                <ServerEntry
+                  key={element.key}
+                  description={element.name}
+                  ip={element.ip}
+                  isSelected={element === selectedServer}
+                  onPress={() => {
+                    setSelectedServer(element);
+                    handleConnection(element);
+                  }}
+                  onLongPress={() =>
+                    srvDispatch({
+                      type: DeleteServer,
+                      server: element,
+                    })
+                  }
+                  connectionStatus={element.status}
+                />
+              );
+            })}
+            <ManualIP connectionHandler={manualIPSelection} />
+          </ServerScrollView>
 
-        <InputContainer>
-          <StyledTextInput
-            ref={emailInputRef}
-            autoCompleteType="email"
-            keyboardType="email-address"
-            placeholder="Email address..."
-            onChangeText={setEmail}
-            editable={loginState === 0}
+          <InputContainer>
+            <StyledTextInput
+              ref={emailInputRef}
+              autoCompleteType="email"
+              keyboardType="email-address"
+              placeholder="E-mail"
+              onChangeText={setEmail}
+              editable={loginState === 0}
+            />
+            <StyledTextInput
+              ref={pwdInputRef}
+              autoCompleteType="password"
+              keyboardType="default"
+              secureTextEntry
+              placeholder="Password"
+              onChangeText={setPwd}
+              editable={loginState === 0}
+            />
+          </InputContainer>
+          <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: -10}}>
+            Do you need an account?
+          </Text>
+          <ButtonsContainer>
+            <CustomizedButton
+              text="Click here"
+              onPress={() => setModalVisible(true)}
+            />
+            <LoginButton onPress={handleLogin} state={loginState} />
+          </ButtonsContainer>
+          {isModalVisible && (
+            <StyledBlurView
+              blurType={Platform.OS === 'ios' ? 'regular' : 'dark'}
+              blurAmount={1}
+            />
+          )}
+          <AccountModal
+            visible={isModalVisible}
+            handleClose={() => setModalVisible(false)}
           />
-          <StyledTextInput
-            ref={pwdInputRef}
-            autoCompleteType="password"
-            keyboardType="default"
-            secureTextEntry
-            placeholder="Password..."
-            onChangeText={setPwd}
-            editable={loginState === 0}
-          />
-        </InputContainer>
-
-        <ButtonsContainer>
-          <LoginButton onPress={handleLogin} state={loginState} />
-          <CustomizedButton
-            text="Need account?"
-            onPress={() => setModalVisible(true)}
-          />
-        </ButtonsContainer>
-        {isModalVisible && (
-          <StyledBlurView
-            blurType={Platform.OS === 'ios' ? 'regular' : 'dark'}
-            blurAmount={1}
-          />
-        )}
-        <AccountModal
-          visible={isModalVisible}
-          handleClose={() => setModalVisible(false)}
-        />
-      </LoginViewContainer>
-      {/* </ScrollView> */}
-    </KeyboardAvoidingView>
+        </LoginViewContainer>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 

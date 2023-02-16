@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View, Modal, Button} from 'react-native';
+import {Colors} from './Stylesheets/Stylesheets';
 
 interface ModalProps {
   visible: boolean;
@@ -34,11 +35,10 @@ const AccountModal: React.FC<ModalProps> = ({
         shadowRadius: 4,
         elevation: 5,
       }}>
-      <Text style={{fontSize: 18}}>
-        Aby otrzymać swoje dane logowania do systemu skontaktuj się z
-        administratorem.
+      <Text style={{fontSize: 20}}>
+        Contact with your system administrator at{'\n'}+48 123 456 789
       </Text>
-      <Button onPress={handleClose} title="Ok" />
+      <Button color={Colors.PurpleAccent} onPress={handleClose} title="Ok" />
     </View>
   </Modal>
 );

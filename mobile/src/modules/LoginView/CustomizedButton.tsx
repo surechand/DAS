@@ -31,7 +31,7 @@ const CustomizedButton: React.FC<ButtonProps> = ({
                   fontWeight: '600',
                   color: Colors.Font,
                 }
-              : {fontSize: 20, color: Colors.Font}
+              : {fontSize: 20, fontWeight: 'bold', color: Colors.PurpleAccent}
           }>
           {text}
         </Text>

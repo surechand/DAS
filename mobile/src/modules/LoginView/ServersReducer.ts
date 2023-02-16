@@ -96,7 +96,7 @@ export const serversReducer = (
     case DeleteServer:
       if (server) {
         if (index === 0) newState.shift();
-        else newState.splice(index - 1, 1);
+        else newState.splice(index, 1);
       }
       return newState;
 

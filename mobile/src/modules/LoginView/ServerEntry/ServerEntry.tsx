@@ -37,7 +37,7 @@ const ServerEntry: React.FC<EntryProps> = ({
       case connectionStates.connecting:
         return <ActivityIndicator size="large" color={Colors.Accent} />;
       case connectionStates.connected:
-        return <RangeIcon name="check" color={Colors.Green} />;
+        return <RangeIcon name="checkmark" color={Colors.Green} />;
       default:
     }
   };
@@ -45,8 +45,8 @@ const ServerEntry: React.FC<EntryProps> = ({
   return (
     <EntryContainer onPress={onPress} onLongPress={onLongPress}>
       <CheckIcon
-        name="check"
-        color={isSelected ? 'lightblue' : 'transparent'}
+        name="radio-button-on"
+        color={isSelected ? Colors.PurpleAccent : 'transparent'}
       />
       <TextContainer>
         <PrimaryText>{description}</PrimaryText>

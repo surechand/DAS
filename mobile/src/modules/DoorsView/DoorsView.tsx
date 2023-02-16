@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   LayoutAnimation,
@@ -24,7 +24,6 @@ const DoorsView: React.FC = () => {
   const {refreshDoorsList, lockLongOpen, lockQuickOpen, lockClose} =
     useSocketEmitter();
   const navigation = useNavigation<doorsScreenProp>();
-  const [lastExpanded, setLastExpanded] = useState<string | undefined>();
 
   const logOut = () => {
     disconnectSocket();
@@ -39,18 +38,12 @@ const DoorsView: React.FC = () => {
         placeindex === index
           ? (el.isExpanded = !el.isExpanded)
           : (el.isExpanded = false);
-      setLastExpanded(el.lockID);
     });
     setDoorsList(array);
   };
 
   useEffect(() => {
     refreshDoorsList();
-    setLastExpanded(undefined);
-    const lastTemp = doorsList.find(el => el.lockID === lastExpanded);
-    if (lastTemp) {
-      lastTemp.isExpanded = true;
-    }
   }, []);
 
   return (

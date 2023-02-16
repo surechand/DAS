@@ -1,10 +1,10 @@
-import { Text, View, Pressable } from 'react-native';
+import {Text, View, Pressable} from 'react-native';
 import styled from 'styled-components';
-import Icon from 'react-native-vector-icons/AntDesign';
-import { Shadows, Colors } from '../Stylesheets/Stylesheets';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {Shadows, Colors} from '../Stylesheets/Stylesheets';
 
 export const EntryContainer = styled(Pressable)`
-  margin-top: -0.5px;
+  margin-bottom: 2px;
 
   height: 80px;
   width: 100%;
@@ -14,10 +14,8 @@ export const EntryContainer = styled(Pressable)`
   padding-right: 5px;
 
   border-style: solid;
-  border-top-color: ${Colors.Accent};
-  border-top-width: 0.5px;
-  border-bottom-color: ${Colors.Accent};
-  border-bottom-width: 0.5px;
+  border: 1px solid ${Colors.Accent};
+  border-radius: 10px;
 `;
 
 export const TextContainer = styled(View)`
@@ -38,7 +36,7 @@ export const PrimaryText = styled(Text)`
 `;
 
 export const SecondaryText = styled(Text)`
-  flex: 1;
+  flex: 2;
   font-size: 22px;
   padding-bottom: 12px;
   /* border: 1px solid black; */
@@ -48,14 +46,12 @@ export const SecondaryText = styled(Text)`
 
 export const RangeIcon = styled(Icon)`
   font-size: 42px;
-  height: 41px;
   /* border: 1px solid black; */
   align-self: center;
 `;
 
 export const CheckIcon = styled(Icon)`
   flex: 1;
-  font-size: 36px;
-  height: 35px;
+  font-size: 32px;
   align-self: center;
 `;

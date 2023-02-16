@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SecondaryText, StyledTextInput } from '../LoginView.Components';
+import React, {useState} from 'react';
+import {SecondaryText, StyledTextInput} from '../LoginView.Components';
 import {
   ViewContainerVertical,
   InputContainerHorizontal,
@@ -17,13 +17,13 @@ const ManualIP: React.FC<ManualIPProps> = ({
 
   return (
     <ViewContainerVertical>
-      <SecondaryText style={{ marginTop: 10, marginBottom: 10 }}>
-        Manual IP
+      <SecondaryText style={{marginTop: 10, marginBottom: 10}}>
+        Add new server
       </SecondaryText>
       <InputContainerHorizontal>
         <StyledTextInput
           editable
-          style={{ height: 40, flex: 7 }}
+          style={{height: 40, flex: 7}}
           placeholder="Server's IP"
           onChangeText={setAddress}
         />

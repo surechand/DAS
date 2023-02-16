@@ -9,13 +9,22 @@ export const Styles = StyleSheet.create({
 });
 
 export const Colors = {
-  Font: '#f7fbff',
   LightBlueAccent: '#91bcff',
   BlueAccent: '#007CBE',
   TileBackgroud: '#f5f5f5',
   LightBackground: '#6e6e6e',
   GrayAccent: '#404040',
-  GreenAccent: '#93f594',
+  GreenAccent: '#c8f7c9',
+  Background: '#ffffff',
+  HeaderFont: '#683BC6',
+  Font: '#646464DE',
+  Accent: '#D9D9D9',
+  PurpleAccent: '#683BC6',
+  Alert: '#fc7e00',
+  Gray: '#8f8f8f',
+  Green: '#1abd46',
+  Red: '#e30505',
+  Purpleshade: '#EFE9FD',
 };
 
 export const Shadows = {

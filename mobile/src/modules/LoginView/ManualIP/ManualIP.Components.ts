@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 import styled from 'styled-components';
-import { View } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
-import { Colors } from '../Stylesheets/Stylesheets';
+import {View} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {Colors} from '../Stylesheets/Stylesheets';
 
 export const ViewContainerVertical = styled(View)`
   display: flex;
@@ -22,10 +22,10 @@ export const InputContainerHorizontal = styled(View)`
 `;
 
 export const IconButton = styled(Icon).attrs({
-  name: 'plus',
+  name: 'md-add-circle',
 })`
   flex: 1;
-  color: ${Colors.Accent};
+  color: ${Colors.PurpleAccent};
   font-size: 36px;
   align-self: center;
   margin-left: 4px;

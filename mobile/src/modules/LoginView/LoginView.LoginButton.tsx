@@ -22,17 +22,24 @@ export const LoginButton: React.FC<LoginButtonProps> = ({
 }: LoginButtonProps) => {
   return (
     <Pressable
-      style={{flex: 1, justifyContent: 'space-around', alignItems: 'center'}}
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.PurpleAccent,
+        borderRadius: 20,
+        height: 40,
+      }}
       onPress={onPress}
       disabled={state === 1 ? true : false}>
       {state < 2 && (
         <Text
           style={{
-            fontSize: 36,
+            fontSize: 28,
             fontWeight: '600',
-            color: state < 1 ? Colors.Font : Colors.Gray,
+            color: state < 1 ? Colors.Background : Colors.Gray,
           }}>
-          Login
+          Log in
         </Text>
       )}
       {state === 2 && <ActivityIndicator size="large" color={Colors.Accent} />}

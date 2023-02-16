@@ -38,7 +38,7 @@ const ExpandableItem = ({
         onPress={onPressFunction}
         style={[
           styles.accordionHeaderItem,
-          item.isOpen ? styles.inRangeColor : styles.outOfRangeColor,
+          item.isOpen ? styles.isOpenColor : styles.isNotOpenColor,
         ]}>
         <Text style={styles.accordionHeaderText}>{item.doorName}</Text>
       </TouchableOpacity>

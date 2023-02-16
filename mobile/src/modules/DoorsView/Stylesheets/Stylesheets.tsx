@@ -5,15 +5,16 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 0,
-    backgroundColor: Colors.LightBackground,
+    backgroundColor: Colors.Background,
   },
-  inRangeColor: {
+  isOpenColor: {
     backgroundColor: Colors.GreenAccent,
   },
-  outOfRangeColor: {
-    backgroundColor: Colors.TileBackgroud,
+  isNotOpenColor: {
+    backgroundColor: Colors.Background,
   },
   headerRow: {
+    marginTop: 12,
     flexDirection: 'row',
     justifyContent: 'center',
     textAlign: 'center',
@@ -21,32 +22,28 @@ export const styles = StyleSheet.create({
   headerText: {
     flexGrow: 1,
     fontSize: 38,
-    backgroundColor: Colors.GrayAccent,
-    marginVertical: 0,
-    paddingTop: 8,
+    paddingTop: 4,
     paddingBottom: 10,
     textAlign: 'center',
-    color: Colors.Font,
+    color: Colors.PurpleAccent,
   },
   headerButton: {
     flexGrow: 1,
-    fontSize: 38,
+    fontSize: 32,
     justifyContent: 'center',
     textAlign: 'center',
-    backgroundColor: Colors.GrayAccent,
-    color: Colors.TileBackgroud,
+    color: Colors.PurpleAccent,
     paddingTop: 14,
     paddingLeft: 14,
     paddingRight: 14,
   },
   accordionHeaderItem: {
     padding: 10,
-    marginVertical: 4,
-    marginHorizontal: 24,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    marginVertical: 6,
+    marginHorizontal: 32,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.Accent,
   },
   accordionHeaderText: {
     fontSize: 24,
@@ -60,7 +57,7 @@ export const styles = StyleSheet.create({
   accordionListElementText: {
     fontSize: 24,
     borderRadius: 8,
-    backgroundColor: Colors.GrayAccent,
+    backgroundColor: Colors.Purpleshade,
     padding: 10,
     textAlign: 'center',
     color: Colors.Font,

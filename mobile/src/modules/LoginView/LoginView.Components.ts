@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
-import { BlurView } from '@react-native-community/blur';
-import { Text, View, TextInput, ScrollView } from 'react-native';
+import {BlurView} from '@react-native-community/blur';
+import {Text, View, TextInput, ScrollView} from 'react-native';
 import styled from 'styled-components';
-import { Shadows, Colors } from './Stylesheets/Stylesheets';
+import {Shadows, Colors} from './Stylesheets/Stylesheets';
 
 export const LoginViewContainer = styled(View)`
   flex: 1;
@@ -18,7 +18,7 @@ export const HeaderText = styled(Text)`
   margin-top: 5%;
   font-weight: 600;
   font-size: 52px;
-  color: ${Colors.Font};
+  color: ${Colors.HeaderFont};
   /* text-shadow: ${Shadows.AccentBigger}; */
   /* border: 1px solid black; */
 `;
@@ -26,14 +26,13 @@ export const HeaderText = styled(Text)`
 export const SecondaryText = styled(Text)`
   font-size: 24px;
   font-weight: 500;
-  color: ${Colors.Font};
+  color: ${Colors.HeaderFont};
   /* text-shadow: ${Shadows.AccentSmaller}; */
 `;
 
 export const ServerScrollView = styled(ScrollView)`
-  flex: 6;
+  /* flex: 1; */
   width: 90%;
-  border: 1px solid ${Colors.Accent};
   border-radius: 5px;
 `;
 
@@ -53,21 +52,23 @@ export const InputContainer = styled(View)`
 export const StyledTextInput = styled(TextInput).attrs({
   autoCapitalize: 'none',
 })`
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 8px;
   width: 90%;
   height: 40%;
+  min-height: 45px;
   font-size: 22px;
-  background-color: ${(props) => (props.editable ? '#f7fbff' : '#707070')};
+  background-color: ${props => (props.editable ? '#f7fbff' : '#707070')};
   border: 1px solid ${Colors.Accent};
 `;
 
 export const ButtonsContainer = styled(View)`
   flex: 2;
-  width: 100%;
+  width: 80%;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  alignitems: center;
   /* border: 1px solid black; */
 `;
 
