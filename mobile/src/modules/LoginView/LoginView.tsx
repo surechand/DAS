@@ -168,18 +168,8 @@ const LoginView = (): JSX.Element => {
       contentContainerStyle={{flexGrow: 1}}
       nestedScrollEnabled={true}>
       <KeyboardAvoidingView
-        // KeyboardAwareScrollView
-
         behavior="position"
         style={Background}
-        // style={{
-        //   flex: 1,
-        //   display: 'flex',
-        //   flexDirection: 'column',
-        //   // justifyContent: 'center',
-        //   alignContent: 'center',
-        //   backgroundColor: '#373838',
-        // }}
         contentContainerStyle={{flex: 1}}
         keyboardVerticalOffset={-1000}>
         <LoginViewContainer>
